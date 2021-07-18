@@ -102,15 +102,107 @@ int dijkstra( int source,int distination,vector<pair<int,int>> graph[]=graph1){
     return dijkstra_distance[distination];
 
 }
-//
+// bellman ford
 
+
+bool Bellnam_visit[Size];
+int Bellman_distance[Size];
+int Bellman_graph[Size][3]; /// three places one for from node value , one for to node value , one for distance value
+
+
+int  Bellman(int source, int distination,int nodes_number,int bridges_number){
+for(int i=0;i<Size;i++){
+
+    Bellman_distance[i]=2e9;
+
+}
+Bellman_distance[source]=0;
+for (int node =0;node <= nodes_number-1; node++ ){
+    for(int bridge=0;bridge<bridges_number;bridge++){
+            int current_bridge[3];
+            current_bridge[0]=Bellman_graph[bridge][0];
+            current_bridge[1]=Bellman_graph[bridge][1];
+            current_bridge[2]=Bellman_graph[bridge][2];
+        if (Bellman_distance[ current_bridge[1] ] >Bellman_distance[ current_bridge[0] ] + current_bridge[2])
+
+        Bellman_distance[ current_bridge[1] ] = Bellman_distance[ current_bridge[0] ] + current_bridge[2];
+
+    }
+
+
+
+}
+
+
+return Bellman_distance[distination];
+}
+
+////////////////////////////////
+/// warshall
+
+int warshall_distance[Size][Size];
+
+int warshall(int source ,int  distination,int nodes_number ){
+
+for(int k=0;k<=nodes_number;k++){
+    for(int i=0;i<=nodes_number;i++){
+        for(int j=0;j<=nodes_number;j++){
+            warshall_distance[i][j]=min(warshall_distance[i][j],warshall_distance[i][k]+warshall_distance[k][j]);
+
+
+
+
+        }
+    }
+
+
+
+}
+
+
+
+return warshall_distance[source][distination];
+
+}
 
 
 int main()
 {
-    vector<int> graph[]={ {},{4,8},{},{},{},{7,1,6},{9},{2,3},{},{}
-    };
-    vector<pair<int,int>> dijkstra_graph[]={  {{1,1},{2,3} },{{0,1},{2,1}},{{0,2},{1,1}}};
-    cout<<dijkstra(0,2);
+//    vector<int> graph[]={ {},{4,8},{},{},{},{7,1,6},{9},{2,3},{},{}
+//    };
+//    vector<pair<int,int>> dijkstra_graph[]={  {{1,1},{2,3} },{{0,1},{2,1}},{{0,2},{1,1}}};
+//    cout<<dijkstra(0,2)<<endl;
+    ///// bellman usage
+//    int n,m,from ,to,cost;
+//    cout<<"please enter numer of node and brideges: ";
+//
+//    cin>>n>>m;
+//    cout<<"please enter "<<m<<"of lines with three separated values from , to ,cost: ";
+//    for(int bridge=0;bridge<m;bridge++){
+//        cin>> Bellman_graph[bridge][0]>>Bellman_graph[bridge][1]>>Bellman_graph[bridge][2];
+//    }
+//    int source,distination;
+//    cout<< "enter source and distination: ";
+//    cin>>source>>distination;
+//    cout<<"shortest distance is : "<< Bellman(source,distination,n,m);
+
+
+////////////////////
+    int nodes_number;
+    cout<<"enter number of nodes: ";
+    cin>>nodes_number;
+    int column,row;
+    for(int column=0;column<=nodes_number;column++){  /// initial distances to inifinte
+        for(int row=0;row<=nodes_number;row++) warshall_distance[column][row]=10000;
+    }
+    for(int i=0;i<5;i++){
+cin>>column>>row>>warshall_distance[column][row];
+        cout<<"entered"<<endl;
+    }
+    int source,distination;
+    cout<<"source and distination: ";
+    cin>> source>> distination;
+
+    cout<<"shortest path from " << source<<" to "<< distination<< " is: "<<warshall(source,distination,nodes_number)<<endl;
     return 0;
 }
